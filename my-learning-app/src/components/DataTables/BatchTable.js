@@ -10,7 +10,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ChevronDown, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -18,9 +18,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -33,31 +30,37 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const data = [
+const batchData = [
   {
-    id: "m5gr84i9",
-    course: "Web and App Development",
+    id: "b1",
+    batchName: "Batch A",
     status: "active",
-    duration: "1 Year",
-    description: "Make Student Complete Web and App developer from Scratch.",
+    trainer: "John Doe",
+    noOfStudents: 30,
+    course: "Web & Mobile App Development",
+    description: "Morning batch for Web Development",
   },
   {
-    id: "3u1reuv4",
-    course: "App Development",
-    status: "active",
-    duration: "4 months",
-    description: "Make Web DEVELOPER also App Developer",
-  },
-  {
-    id: "derv1ws0",
+    id: "b2",
+    batchName: "Batch B",
+    status: "inactive",
+    trainer: "Jane Smith",
+    noOfStudents: 25,
     course: "Python Development",
+    description: "Evening batch for Python Development",
+  },
+  {
+    id: "b3",
+    batchName: "Batch C",
     status: "active",
-    duration: "4 months",
-    description: "Learn Python from Scratch",
+    trainer: "Mike Johnson",
+    noOfStudents: 20,
+    course: "App Development",
+    description: "Weekend batch for App Development",
   },
 ];
 
-export const columns = [
+export const batchColumns = [
   {
     id: "select",
     header: ({ table }) => (
@@ -78,6 +81,11 @@ export const columns = [
     enableHiding: false,
   },
   {
+    accessorKey: "batchName",
+    header: "Batch Name",
+    cell: ({ row }) => <div>{row.getValue("batchName")}</div>,
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
@@ -85,44 +93,50 @@ export const columns = [
     ),
   },
   {
-    accessorKey: "course",
-    header: () => "Course", // Add a label for the course header
-    cell: ({ row }) => <div>{row.getValue("course")}</div>,
+    accessorKey: "trainer",
+    header: "Trainer",
+    cell: ({ row }) => <div>{row.getValue("trainer")}</div>,
   },
   {
     accessorKey: "description",
-    header: () => "Description", // Add a label for the description header
+    header: "Description",
     cell: ({ row }) => <div>{row.getValue("description")}</div>,
   },
   {
-    accessorKey: "duration",
-    header: () => <div className="text-right">Duration</div>,
+    accessorKey: "noOfStudents",
+    header: () => <div className="text-right">No. of Students</div>,
     cell: ({ row }) => {
-      const amount = row.getValue("duration");
-      return <div className="text-right font-medium">{amount}</div>;
+      const noOfStudents = row.getValue("noOfStudents");
+      return <div className="text-right font-medium">{noOfStudents}</div>;
+    },
+  },
+  {
+    accessorKey: "course",
+    header: "Course",
+    cell: ({ row }) => {
+      const course = row.getValue("course");
+      return <div className="text-right font-medium">{course}</div>;
     },
   },
   {
     id: "actions",
-    header: () => "Actions", // Add a label for the actions header
+    header: "Actions",
     enableHiding: false,
     cell: ({ row }) => {
-      // Add action buttons here, like edit or delete
       return <MoreHorizontal className="cursor-pointer" />;
     },
   },
 ];
 
-
-export function CourseTable() {
+export function BatchTable() {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
-    data,
-    columns,
+    data: batchData,
+    columns: batchColumns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -143,10 +157,10 @@ export function CourseTable() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter course..."
-          value={table.getColumn("course")?.getFilterValue() ?? ""}
+          placeholder="Filter batch..."
+          value={table.getColumn("batchName")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("course")?.setFilterValue(event.target.value)
+            table.getColumn("batchName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -217,7 +231,7 @@ export function CourseTable() {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={batchColumns.length}
                   className="h-24 text-center"
                 >
                   No results.

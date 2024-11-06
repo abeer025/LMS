@@ -35,25 +35,40 @@ import {
 
 const data = [
   {
-    id: "m5gr84i9",
-    course: "Web and App Development",
-    status: "active",
-    duration: "1 Year",
-    description: "Make Student Complete Web and App developer from Scratch.",
+    id: "1",
+    firstName: "John",
+    lastName: "Doe",
+    education: "MSc Computer Science",
+    cnic: "12345-6789012-3",
+    email: "johndoe@example.com",
+    profilePicture: "link_to_picture",
+    address: "123 Elm St",
+    gender: "Male",
+    role: "trainer",
   },
   {
-    id: "3u1reuv4",
-    course: "App Development",
-    status: "active",
-    duration: "4 months",
-    description: "Make Web DEVELOPER also App Developer",
+    id: "2",
+    firstName: "Jane",
+    lastName: "Smith",
+    education: "MBA",
+    cnic: "12345-6789012-4",
+    email: "janesmith@example.com",
+    profilePicture: "link_to_picture",
+    address: "456 Maple Ave",
+    gender: "Female",
+    role: "student",
   },
   {
-    id: "derv1ws0",
-    course: "Python Development",
-    status: "active",
-    duration: "4 months",
-    description: "Learn Python from Scratch",
+    id: "3",
+    firstName: "Jawad",
+    lastName: "Ahmed",
+    education: "Undergraduate",
+    cnic: "12345-6789012-4",
+    email: "jawad@example.com",
+    profilePicture: "link_to_picture",
+    address: "456 Maple Ave",
+    gender: "Male",
+    role: "student",
   },
 ];
 
@@ -62,9 +77,12 @@ export const columns = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllRowsSelected(!!value)}
-        aria-label="Select all rows"
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
       />
     ),
     cell: ({ row }) => (
@@ -77,48 +95,51 @@ export const columns = [
     enableSorting: false,
     enableHiding: false,
   },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "course",
-    header: () => "Course", // Add a label for the course header
-    cell: ({ row }) => <div>{row.getValue("course")}</div>,
-  },
-  {
-    accessorKey: "description",
-    header: () => "Description", // Add a label for the description header
-    cell: ({ row }) => <div>{row.getValue("description")}</div>,
-  },
-  {
-    accessorKey: "duration",
-    header: () => <div className="text-right">Duration</div>,
-    cell: ({ row }) => {
-      const amount = row.getValue("duration");
-      return <div className="text-right font-medium">{amount}</div>;
-    },
-  },
+  { accessorKey: "firstName", header: "First Name" },
+  { accessorKey: "lastName", header: "Last Name" },
+  { accessorKey: "education", header: "Education" },
+  { accessorKey: "cnic", header: "CNIC" },
+  { accessorKey: "email", header: "Email" },
+  { accessorKey: "profilePicture", header: "Profile Picture" },
+  { accessorKey: "address", header: "Address" },
+  { accessorKey: "gender", header: "Gender" },
+  { accessorKey: "role", header: "Role" },
   {
     id: "actions",
-    header: () => "Actions", // Add a label for the actions header
     enableHiding: false,
     cell: ({ row }) => {
-      // Add action buttons here, like edit or delete
-      return <MoreHorizontal className="cursor-pointer" />;
+      const trainer = row.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(trainer.firstName)}
+            >
+              Copy First Name
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>See Details</DropdownMenuItem>
+            <DropdownMenuItem>Change Role</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
   },
 ];
 
-
-export function CourseTable() {
-  const [sorting, setSorting] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
-  const [columnVisibility, setColumnVisibility] = useState({});
-  const [rowSelection, setRowSelection] = useState({});
+export function TrainerTable() {
+  const [sorting, setSorting] = React.useState([]);
+  const [columnFilters, setColumnFilters] = React.useState([]);
+  const [columnVisibility, setColumnVisibility] = React.useState({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -143,10 +164,10 @@ export function CourseTable() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter course..."
-          value={table.getColumn("course")?.getFilterValue() ?? ""}
+          placeholder="Filter by first name..."
+          value={table.getColumn("firstName")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("course")?.setFilterValue(event.target.value)
+            table.getColumn("firstName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

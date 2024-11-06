@@ -33,27 +33,47 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+// Sample data for students
 const data = [
   {
-    id: "m5gr84i9",
-    course: "Web and App Development",
+    id: "s1",
+    name: "John Doe",
+    email: "john.doe@example.com",
+    age: 21,
     status: "active",
-    duration: "1 Year",
-    description: "Make Student Complete Web and App developer from Scratch.",
+    course: "Web Development",
   },
   {
-    id: "3u1reuv4",
-    course: "App Development",
+    id: "s2",
+    name: "Jane Smith",
+    email: "jane.smith@example.com",
+    age: 22,
     status: "active",
-    duration: "4 months",
-    description: "Make Web DEVELOPER also App Developer",
+    course: "Graphic Design",
   },
   {
-    id: "derv1ws0",
-    course: "Python Development",
+    id: "s3",
+    name: "Sam Wilson",
+    email: "sam.wilson@example.com",
+    age: 20,
+    status: "inactive",
+    course: "Mobile App Development",
+  },
+  {
+    id: "s4",
+    name: "Emily Johnson",
+    email: "emily.johnson@example.com",
+    age: 23,
     status: "active",
-    duration: "4 months",
-    description: "Learn Python from Scratch",
+    course: "WordPress",
+  },
+  {
+    id: "s5",
+    name: "Michael Brown",
+    email: "michael.brown@example.com",
+    age: 19,
+    status: "active",
+    course: "Data Science",
   },
 ];
 
@@ -62,9 +82,12 @@ export const columns = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllRowsSelected(!!value)}
-        aria-label="Select all rows"
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
       />
     ),
     cell: ({ row }) => (
@@ -78,6 +101,36 @@ export const columns = [
     enableHiding: false,
   },
   {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("email")}</div>
+    ),
+  },
+  {
+    accessorKey: "age",
+    header: () => <div className="text-right">Age</div>,
+    cell: ({ row }) => {
+      const age = row.getValue("age");
+      return <div className="text-right font-medium">{age}</div>;
+    },
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
@@ -86,39 +139,47 @@ export const columns = [
   },
   {
     accessorKey: "course",
-    header: () => "Course", // Add a label for the course header
-    cell: ({ row }) => <div>{row.getValue("course")}</div>,
-  },
-  {
-    accessorKey: "description",
-    header: () => "Description", // Add a label for the description header
-    cell: ({ row }) => <div>{row.getValue("description")}</div>,
-  },
-  {
-    accessorKey: "duration",
-    header: () => <div className="text-right">Duration</div>,
-    cell: ({ row }) => {
-      const amount = row.getValue("duration");
-      return <div className="text-right font-medium">{amount}</div>;
-    },
+    header: "Course",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("course")}</div>
+    ),
   },
   {
     id: "actions",
-    header: () => "Actions", // Add a label for the actions header
     enableHiding: false,
     cell: ({ row }) => {
-      // Add action buttons here, like edit or delete
-      return <MoreHorizontal className="cursor-pointer" />;
+      const student = row.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(student.name)}
+            >
+              Copy student name
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>See Details</DropdownMenuItem>
+            <DropdownMenuItem>Change status</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
   },
 ];
 
-
-export function CourseTable() {
-  const [sorting, setSorting] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
-  const [columnVisibility, setColumnVisibility] = useState({});
-  const [rowSelection, setRowSelection] = useState({});
+export function StudentTable() {
+  const [sorting, setSorting] = React.useState([]);
+  const [columnFilters, setColumnFilters] = React.useState([]);
+  const [columnVisibility, setColumnVisibility] = React.useState({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -143,10 +204,10 @@ export function CourseTable() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter course..."
-          value={table.getColumn("course")?.getFilterValue() ?? ""}
+          placeholder="Filter student..."
+          value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("course")?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
