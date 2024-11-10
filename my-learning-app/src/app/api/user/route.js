@@ -15,11 +15,9 @@ export async function POST(request) {
     // Check if the user already exists
     const existingUser = await UserModal.findOne({ email: obj.email });
     if (existingUser) {
-      return new Response(
-        JSON.stringify({ error: true, msg: "User Already Exists" }),
-        {
-          status: 403,
-        }
+      return Response.json(
+        { error: true, msg: "User Already Exists" },
+        { status: 403 }
       );
     }
 
@@ -39,26 +37,19 @@ export async function POST(request) {
     );
 
     // Send response
-    return new Response(
-      JSON.stringify({
-        error: false,
-        msg: "User Added Successfully",
-        user: newUser,
-        token,
-      }),
-      { status: 201, headers: { "Content-Type": "application/json" } }
+    return  Response.json(
+      { error: false, msg: "User Added Successfully", user: newUser, token },
+      { status: 201 }
     );
   } catch (error) {
     console.error("Error in POST:", error);
-    return new Response(
-      JSON.stringify({ error: true, msg: "Internal Server Error" }),
+    return Response.json(
+      { error: true, msg: "Internal Server Error" },
       { status: 500 }
     );
   }
 }
 
 export async function GET(request) {
-  return new Response(JSON.stringify({ msg: "User GET Request" }), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return  Response.json({ msg: "User GET Request" }, { status: 200 });
 }
