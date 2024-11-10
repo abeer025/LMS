@@ -4,3 +4,10 @@
   "password": "user@123",
   "role": "user"
 }
+
+{
+  "fullname": "Admin",
+  "email": "admin@lms.com",
+  "password": "admin@123",
+  "role": "admin"
+}
