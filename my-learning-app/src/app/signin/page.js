@@ -11,11 +11,10 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
 
 export default async function SignIn() {
   const session = await auth();
-  console.log("session=>, session")
+  console.log("session=>", session);
   if (session) redirect("/");
 
   async function handleEmailSignIn(formData) {
@@ -71,7 +70,7 @@ export default async function SignIn() {
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-wrap items-center justify-between gap-2">
+        <CardFooter className="flex flex-wrap items-center justify-center gap-2">
           <Button variant="link" className="text-sm text-muted-foreground">
             Forgot password?
           </Button>
