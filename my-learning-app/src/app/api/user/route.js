@@ -37,7 +37,7 @@ export async function POST(request) {
     );
 
     // Send response
-    return  Response.json(
+    return Response.json(
       { error: false, msg: "User Added Successfully", user: newUser, token },
       { status: 201 }
     );
@@ -51,5 +51,5 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
-  return  Response.json({ msg: "User GET Request" }, { status: 200 });
+  return Response.json({ msg: "User GET Request" }, { status: 200 });
 }

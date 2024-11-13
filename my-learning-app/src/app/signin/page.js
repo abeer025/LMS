@@ -15,6 +15,7 @@ import Link from "next/link";
 
 export default async function SignIn() {
   const session = await auth();
+  console.log("session=>, session")
   if (session) redirect("/");
 
   async function handleEmailSignIn(formData) {
