@@ -4,7 +4,7 @@ import { auth, signOut } from "../../../auth";
 
 export default async function Header() {
   const session = await auth();
-
+  console.log('session in header=>', session)
   return (
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4">

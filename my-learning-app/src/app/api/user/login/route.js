@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/dbConnect";
+import connectDB from "@/lib/dbConnect";
 import { UserModal } from "@/lib/Modals/UserModal";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";

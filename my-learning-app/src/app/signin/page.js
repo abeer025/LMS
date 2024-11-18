@@ -21,7 +21,7 @@ export default async function SignIn() {
     "use server";
     const email = formData.get("email");
     const password = formData.get("password");
-    await signIn("credentials", { email, password });
+    await signIn("credentials", { email, password , redirect: true });
   }
 
   return (
@@ -62,7 +62,7 @@ export default async function SignIn() {
           <form
             action={async () => {
               "use server";
-              await signIn("google");
+              await signIn("google", {redirect: true});
             }}
           >
             <Button className="w-full" type="submit">

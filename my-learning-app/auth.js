@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { UserModal } from "@/lib/Modals/UserModal";
 import connectDB from "@/lib/dbConnect";
-// import Credentials from "next-auth/providers/credentials";
+import Credentials from "next-auth/providers/credentials";
 
 const handleLoginUser = async (profile) => {
   await connectDB();
@@ -25,6 +25,30 @@ const handleLoginUser = async (profile) => {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google,
+    Credentials({
+      credentials: {
+        email: {},
+        password: {},
+      },
+      authorize: async (credentials) => {
+        let user = null;
+        console.log("credentials=>", credentials);
+
+        let res = await fetch(
+          `https://lms-lilac-three.vercel.app/api/user/login`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
+          }
+        );
+        res = await res.json();
+        user = res.user;
+        return user;
+      },
+    }),
   ],
   callbacks: {
     async signIn({ account, profile }) {
@@ -37,5 +61,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return true; // handle non-Google providers
     },
-  }
+    async jwt({ token }) {
+      console.log("token=>", token);
+      const user = await handleLoginUser(token);
+      console.log("user in the JWT=>", user);
+      token.role = user.role;
+      token._id = user._id;
+      token.picture = user?.profileImg;
+      token.fullname = user?.fullname;
+      return token;
+    },
+    session({ session, token }) {
+      session.user._id = token._id;
+      session.user.role = token.role;
+      session.user.image = token.picture;
+      session.user.name = token.fullname;
+      return session;
+    },
+  },
 });
