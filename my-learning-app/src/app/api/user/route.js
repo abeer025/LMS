@@ -38,18 +38,27 @@ export async function POST(request) {
 
     // Send response
     return Response.json(
-      { error: false, msg: "User Added Successfully", user: newUser, token },
+      {
+        error: false,
+        msg: "User Added Successfully",
+        user: newUser,
+        token
+      },
       { status: 201 }
     );
   } catch (error) {
     console.error("Error in POST:", error);
     return Response.json(
-      { error: true, msg: "Internal Server Error" },
+      {
+        error: true,
+        msg: "Internal Server Error"
+      },
       { status: 500 }
     );
   }
 }
 
 export async function GET(request) {
-  return Response.json({ msg: "User GET Request" }, { status: 200 });
+  return Response.json({ msg: "User GET Request" },
+    { status: 200 });
 }
