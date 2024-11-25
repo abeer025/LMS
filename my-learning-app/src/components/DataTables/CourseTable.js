@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
 import { useState } from "react";
 import {
   flexRender,
@@ -32,32 +32,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Image from "next/image";
 
-const data = [
-  {
-    id: "m5gr84i9",
-    course: "Web and App Development",
-    status: "active",
-    duration: "1 Year",
-    description: "Make Student Complete Web and App developer from Scratch.",
-  },
-  {
-    id: "3u1reuv4",
-    course: "App Development",
-    status: "active",
-    duration: "4 months",
-    description: "Make Web DEVELOPER also App Developer",
-  },
-  {
-    id: "derv1ws0",
-    course: "Python Development",
-    status: "active",
-    duration: "4 months",
-    description: "Learn Python from Scratch",
-  },
-];
-
-export const columns = [
+const columns = [
   {
     id: "select",
     header: ({ table }) => (
@@ -78,20 +55,30 @@ export const columns = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
+    accessorKey: "thumbnail",
+    header: "Thumbnail",
+    cell: ({ row }) => {
+      const thumbnail = row.getValue("thumbnail");
+      return thumbnail ? (
+        <Image src={thumbnail} alt="Thumbnail" height={50} width={80} />
+      ) : (
+        <Image
+          src="/placeholder.svg?height=50&width=80"
+          alt="Dummy Icon"
+          height={50}
+          width={80}
+        />
+      );
+    },
   },
   {
-    accessorKey: "course",
-    header: () => "Course", // Add a label for the course header
-    cell: ({ row }) => <div>{row.getValue("course")}</div>,
+    accessorKey: "title",
+    header: "Course",
+    cell: ({ row }) => <div>{row.getValue("title")}</div>,
   },
   {
     accessorKey: "description",
-    header: () => "Description", // Add a label for the description header
+    header: "Description",
     cell: ({ row }) => <div>{row.getValue("description")}</div>,
   },
   {
@@ -103,25 +90,32 @@ export const columns = [
     },
   },
   {
+    accessorKey: "eligibility",
+    header: () => <div className="text-right">Eligibility</div>,
+    cell: ({ row }) => {
+      const eligibility = row.getValue("eligibility")
+      return <div className="text-right">{eligibility}</div>
+    },
+  },
+
+  {
     id: "actions",
-    header: () => "Actions", // Add a label for the actions header
+    header: "Actions",
     enableHiding: false,
     cell: ({ row }) => {
-      // Add action buttons here, like edit or delete
       return <MoreHorizontal className="cursor-pointer" />;
     },
   },
 ];
 
-
-export function CourseTable() {
+export function CourseTable({ courses }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
-    data,
+    data: courses,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -144,9 +138,9 @@ export function CourseTable() {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter course..."
-          value={table.getColumn("course")?.getFilterValue() ?? ""}
+          value={table.getColumn("title")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("course")?.setFilterValue(event.target.value)
+            table.getColumn("title")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

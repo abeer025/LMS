@@ -4,11 +4,11 @@ const { Schema } = mongoose;
 
 const courseSchema = new Schema(
   {
-    title: String,
+    title: { type: String, unique: true },
     description: String,
     duration: String,
     eligbility: [String],
-    thumbnail: String
+    thumbnail: String,
   },
   {
     timestamps: true,
