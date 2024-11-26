@@ -7,7 +7,7 @@ const courseSchema = new Schema(
     title: { type: String, unique: true },
     description: String,
     duration: String,
-    eligbility: [String],
+    eligibility: [String],
     thumbnail: String,
   },
   {

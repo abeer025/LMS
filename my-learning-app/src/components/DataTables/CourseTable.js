@@ -93,8 +93,9 @@ const columns = [
     accessorKey: "eligibility",
     header: () => <div className="text-right">Eligibility</div>,
     cell: ({ row }) => {
-      const eligibility = row.getValue("eligibility")
-      return <div className="text-right">{eligibility}</div>
+      const eligibility = row.getValue("eligibility");
+      console.log("Eligibility:", eligibility);
+      return <div>{eligibility?.join(" , ") || "N/A"}</div>;
     },
   },
 
