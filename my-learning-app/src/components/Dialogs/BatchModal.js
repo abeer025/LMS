@@ -29,18 +29,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Mock data for Trainers and Courses
-const trainers = [
-  { id: "trainer1", name: "John Doe" },
-  { id: "trainer2", name: "Jane Smith" },
-  { id: "trainer3", name: "Alice Johnson" },
-];
-
-const courses = [
-  { id: "course1", name: "Web and App Development" },
-  { id: "course2", name: "App Development" },
-  { id: "course3", name: "Python Development" },
-];
 
 export function BatchModal() {
   const [open, setOpen] = React.useState(false);

@@ -30,37 +30,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const batchData = [
-  {
-    id: "b1",
-    batchName: "Batch A",
-    status: "active",
-    trainer: "John Doe",
-    noOfStudents: 30,
-    course: "Web & Mobile App Development",
-    description: "Morning batch for Web Development",
-  },
-  {
-    id: "b2",
-    batchName: "Batch B",
-    status: "inactive",
-    trainer: "Jane Smith",
-    noOfStudents: 25,
-    course: "Python Development",
-    description: "Evening batch for Python Development",
-  },
-  {
-    id: "b3",
-    batchName: "Batch C",
-    status: "active",
-    trainer: "Mike Johnson",
-    noOfStudents: 20,
-    course: "App Development",
-    description: "Weekend batch for App Development",
-  },
-];
-
-export const batchColumns = [
+const Columns = [
   {
     id: "select",
     header: ({ table }) => (
@@ -81,34 +51,9 @@ export const batchColumns = [
     enableHiding: false,
   },
   {
-    accessorKey: "batchName",
-    header: "Batch Name",
-    cell: ({ row }) => <div>{row.getValue("batchName")}</div>,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "trainer",
-    header: "Trainer",
-    cell: ({ row }) => <div>{row.getValue("trainer")}</div>,
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-    cell: ({ row }) => <div>{row.getValue("description")}</div>,
-  },
-  {
-    accessorKey: "noOfStudents",
-    header: () => <div className="text-right">No. of Students</div>,
-    cell: ({ row }) => {
-      const noOfStudents = row.getValue("noOfStudents");
-      return <div className="text-right font-medium">{noOfStudents}</div>;
-    },
+    accessorKey: "title",
+    header: "Title",
+    cell: ({ row }) => <div>{row.getValue("title")}</div>,
   },
   {
     accessorKey: "course",
@@ -117,6 +62,18 @@ export const batchColumns = [
       const course = row.getValue("course");
       return <div className="text-right font-medium">{course}</div>;
     },
+  },
+  {
+    accessorKey: "description",
+    header: "Description",
+    cell: ({ row }) => <div>{row.getValue("description")}</div>,
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("status")}</div>
+    ),
   },
   {
     id: "actions",
@@ -128,15 +85,15 @@ export const batchColumns = [
   },
 ];
 
-export function BatchTable() {
+export function BatchTable(batches) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
-    data: batchData,
-    columns: batchColumns,
+    data: batches,
+    columns: Columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
