@@ -30,7 +30,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const Columns = [
+const columns = [
   {
     id: "select",
     header: ({ table }) => (
@@ -52,16 +52,13 @@ const Columns = [
   },
   {
     accessorKey: "title",
-    header: "Title",
+    header: "Batch",
     cell: ({ row }) => <div>{row.getValue("title")}</div>,
   },
   {
     accessorKey: "course",
     header: "Course",
-    cell: ({ row }) => {
-      const course = row.getValue("course");
-      return <div className="text-right font-medium">{course}</div>;
-    },
+    cell: ({ row }) => <div>{row.getValue("course")?.title || "N/A"}</div>,
   },
   {
     accessorKey: "description",
@@ -85,7 +82,7 @@ const Columns = [
   },
 ];
 
-export function BatchTable(batches) {
+export function BatchTable({ batches}) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -93,7 +90,7 @@ export function BatchTable(batches) {
 
   const table = useReactTable({
     data: batches,
-    columns: Columns,
+    columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -115,9 +112,9 @@ export function BatchTable(batches) {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter batch..."
-          value={table.getColumn("batchName")?.getFilterValue() ?? ""}
+          value={table.getColumn("title")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("batchName")?.setFilterValue(event.target.value)
+            table.getColumn("title")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -131,20 +128,16 @@ export function BatchTable(batches) {
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -153,18 +146,16 @@ export function BatchTable(batches) {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -188,7 +179,7 @@ export function BatchTable(batches) {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={batchColumns.length}
+                  colSpan={columns.length}
                   className="h-24 text-center"
                 >
                   No results.

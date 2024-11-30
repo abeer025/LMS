@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { addBatch } from "@/actions/batches";
 
 
 export function BatchModal() {
@@ -72,50 +73,20 @@ export function BatchModal() {
 
 function BatchForm({ className }) {
   return (
-    <form className={cn("grid items-start gap-4", className)}>
+    <form
+      className={cn("grid items-start gap-4", className)}
+      action={addBatch}
+    >
       {/* Batch Name */}
       <div className="grid gap-2">
-        <Label htmlFor="batchName">Batch Name</Label>
-        <Input required type="text" id="batchName" defaultValue="" />
+        <Label htmlFor="batch">Batch Title</Label>
+        <Input required type="text" id="batch" name={"title"} />
       </div>
 
-      {/* Status */}
+      {/* Description */}
       <div className="grid gap-2">
-        <Label htmlFor="status">Status</Label>
-        <Select required>
-          <SelectTrigger>
-            <SelectValue placeholder="Pending, Completed, Ongoing, Merged" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="completed">Completed</SelectItem>
-            <SelectItem value="ongoing">Ongoing</SelectItem>
-            <SelectItem value="merged">Merged</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Trainer */}
-      <div className="grid gap-2">
-        <Label htmlFor="trainer">Trainer</Label>
-        <Select required>
-          <SelectTrigger>
-            <SelectValue placeholder="Select Trainer" />
-          </SelectTrigger>
-          <SelectContent>
-            {trainers.map((trainer) => (
-              <SelectItem key={trainer.id} value={trainer.name}>
-                {trainer.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* No of Students */}
-      <div className="grid gap-2">
-        <Label htmlFor="noOfStudents">No of Students</Label>
-        <Input required type="number" id="noOfStudents" defaultValue="" />
+        <Label htmlFor="description">Description</Label>
+        <Input required id="description" name={"description"} />
       </div>
 
       {/* Course */}
