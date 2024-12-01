@@ -1,6 +1,6 @@
 import { getBatches } from "@/actions/batches";
 import { getCourses } from "@/actions/courses";
-import { BatchesTable } from "@/components/DataTables/BatchTable";
+import { BatchesTable, BatchTable } from "@/components/DataTables/BatchTable";
 import { BatchModal } from "@/components/Dialogs/BatchModal";
 
 export default async function Batches() {
@@ -14,7 +14,7 @@ export default async function Batches() {
         <BatchModal courses={courses} />
       </div>
 
-      <BatchesTable data={batches} />
+      <BatchTable data={batches} />
     </div>
   );
 }
