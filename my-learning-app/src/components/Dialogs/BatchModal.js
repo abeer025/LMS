@@ -30,8 +30,14 @@ import {
 } from "@/components/ui/select";
 import { addBatch } from "@/actions/batches";
 
+// Mock data for Trainers and Courses
+const trainers = [
+  { id: "trainer1", name: "John Doe" },
+  { id: "trainer2", name: "Jane Smith" },
+  { id: "trainer3", name: "Alice Johnson" },
+];
 
-export function BatchModal() {
+export function BatchModal({ courses }) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = true;
 
@@ -39,13 +45,13 @@ export function BatchModal() {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="destructive">Add Batch</Button>
+          <Button variant="outline">Add Batch</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Add Batch</DialogTitle>
           </DialogHeader>
-          <BatchForm />
+          <BatchForm courses={courses} />
         </DialogContent>
       </Dialog>
     );
@@ -71,35 +77,42 @@ export function BatchModal() {
   );
 }
 
-function BatchForm({ className }) {
+function BatchForm({ className, courses }) {
   return (
-    <form
-      className={cn("grid items-start gap-4", className)}
-      action={addBatch}
-    >
+    <form action={addBatch} className={cn("grid items-start gap-4", className)}>
       {/* Batch Name */}
       <div className="grid gap-2">
-        <Label htmlFor="batch">Batch Title</Label>
-        <Input required type="text" id="batch" name={"title"} />
+        <Label htmlFor="batchName">Batch Name</Label>
+        <Input
+          required
+          type="text"
+          id="batchName"
+          name="title"
+          defaultValue=""
+        />
       </div>
-
-      {/* Description */}
       <div className="grid gap-2">
-        <Label htmlFor="description">Description</Label>
-        <Input required id="description" name={"description"} />
+        <Label htmlFor="batchName">Description</Label>
+        <Input
+          required
+          type="text"
+          id="batchName"
+          name="description"
+          defaultValue=""
+        />
       </div>
 
       {/* Course */}
       <div className="grid gap-2">
         <Label htmlFor="course">Course</Label>
-        <Select required>
+        <Select required name="course">
           <SelectTrigger>
             <SelectValue placeholder="Select Course" />
           </SelectTrigger>
           <SelectContent>
             {courses.map((course) => (
-              <SelectItem key={course.id} value={course.name}>
-                {course.name}
+              <SelectItem key={course._id} value={course._id}>
+                {course.title}
               </SelectItem>
             ))}
           </SelectContent>
