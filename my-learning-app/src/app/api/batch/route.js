@@ -24,7 +24,7 @@ export async function GET(req) {
   }
 
   console.log("query=>", query);
-  const batches = await BatchModal.find(query).populate('course', "title");
+  const batches = await BatchModal.find(query).populate("course", "title");
   return Response.json({
     error: false,
     msg: "Batched Fetched Successfully",

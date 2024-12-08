@@ -13,15 +13,13 @@ const batchSchema = new Schema(
       enum: [
         "pending",
         "admission-open",
-        "admission-closed",
+        "admission-close",
         "ongoing",
         "completed",
       ],
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 export const BatchModal =
